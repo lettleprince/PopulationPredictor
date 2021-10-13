@@ -85,6 +85,7 @@
             <Label Content="Starting Number"
                    Style="{StaticResource HintLabel}"/>
             <TextBox Name="StartNumber"
+                     Text="{Binding StartNumber}"
                      Style="{StaticResource UserInput}"/>
         </StackPanel>
 
@@ -93,6 +94,7 @@
             <Label Content="Daily Increase(%)"
                    Style="{StaticResource HintLabel}"/>
             <TextBox Name="DailyIncrease"
+                     Text="{Binding Percentage}"
                      Style="{StaticResource UserInput}"/>
         </StackPanel>
 
@@ -101,6 +103,7 @@
             <Label Content="Number of Days"
                    Style="{StaticResource HintLabel}"/>
             <TextBox Name="Days"
+                     Text="{Binding Days}"
                      Style="{StaticResource UserInput}"/>
         </StackPanel>
 
@@ -111,8 +114,10 @@
                    Style="{StaticResource ResultLabel}"/>
             <ListBox Name="List"
                      DockPanel.Dock="Bottom"
-                 Style="{StaticResource ResultList}"
-                 ></ListBox>
+                     ItemsSource="{Binding Path=Items}"
+                 Style="{StaticResource ResultList}">
+                
+            </ListBox>
         </DockPanel>
 
         <Button Name="Calculate" 
