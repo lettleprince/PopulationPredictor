@@ -68,10 +68,20 @@ namespace PopulationPredictor
 
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            
-            File.AppendAllText(fullName, output.ToString());
-            output.Clear();
-            List.Items.Clear();
+            string message;
+            if (output.Length > 0)
+            {
+                File.AppendAllText(fullName, output.ToString());
+                output.Clear();
+                List.Items.Clear();
+
+                message = $"Results have been saved to file: ${fullName}";
+            }
+            else
+            {
+                message = "Please input valid values!";
+            }
+            MessageBox.Show(message);
         }
     }
 }
