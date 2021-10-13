@@ -1,8 +1,5 @@
 ﻿// Group2: Jingfei Yao, Grace Pauly, Xiaotong Han.
 using System.Windows;
-using System.IO;
-using System;
-using System.Text;
 
 /*
  * Create an application that predicts the approximate size of a population of organisms. 

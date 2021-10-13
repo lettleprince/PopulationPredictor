@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Group2: Jingfei Yao, Grace Pauly, Xiaotong Han.
+using System;
 using System.IO;
 using System.Text;
 using System.ComponentModel;
@@ -13,32 +14,28 @@ namespace PopulationPredictor
         private readonly ObservableCollection<string> items = new();
         public ObservableCollection<string> Items => items;
 
-        private int startNumber;
         public int StartNumber
         {
-            get { return startNumber; }
-            set { startNumber = value; propertyChanged(); }
+            get;
+            set;
         }
 
-        private float percentage;
         public float Percentage
         {
-            get { return percentage; }
-            set { percentage = value; propertyChanged(); }
+            get;
+            set;
         }
 
-        private int days;
         public int Days
-        {
-            get { return days; }
-            set { days = value; propertyChanged(); }
+        { 
+            get; 
+            set; 
         }
 
-        private const int DAY_DIGITS = 3;
-
-        private float result;
+        private const int DAY_DIGITS = 2;
         private const string FILENAME = "Result.txt";
 
+        private float result;
         private readonly StringBuilder output = new();
         private string fullName;
 
@@ -67,10 +64,10 @@ namespace PopulationPredictor
 
             result = StartNumber;
 
-            for (int x = 0; x < days; x++)
+            for (int x = 0; x < Days; x++)
             {
                 result += result * (Percentage / 100);
-                string resultString = $"Day {x + 1,DAY_DIGITS}: {result}";
+                string resultString = $"Day{x + 1, DAY_DIGITS}: {result}";
                 Items.Add(resultString);
                 output.Append($"{resultString}{Environment.NewLine}");
             }
@@ -83,13 +80,6 @@ namespace PopulationPredictor
             {
                 File.AppendAllText(fullName, output.ToString());
                 message = $"Results have been saved to file: ${fullName}";
-
-                output.Clear();
-                Items.Clear();
-
-                StartNumber = 0;
-                Percentage = 0;
-                Days = 0;
             }
             else
             {
