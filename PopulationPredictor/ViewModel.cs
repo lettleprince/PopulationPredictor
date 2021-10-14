@@ -1,4 +1,5 @@
-﻿using System;
+﻿// Group2: Jingfei Yao, Grace Pauly, Xiaotong Han.
+using System;
 using System.IO;
 using System.Text;
 using System.ComponentModel;
@@ -10,35 +11,47 @@ namespace PopulationPredictor
 {
     class ViewModel : INotifyPropertyChanged
     {
-        private readonly ObservableCollection<string> items = new();
-        public ObservableCollection<string> Items => items;
+        private const string invalidErrorMessage = "Please input valid values!";
+
+        public ObservableCollection<string> Items { get; } = new();
 
         private int startNumber;
-        public int StartNumber
+        public string StartNumber
         {
-            get { return startNumber; }
-            set { startNumber = value; propertyChanged(); }
+            get { return startNumber > 0 ? startNumber.ToString() : ""; }
+            set
+            {
+                bool canParse = int.TryParse(value, out int result);
+                startNumber = canParse ? result : 0;
+            }
         }
 
         private float percentage;
-        public float Percentage
+        public string Percentage
         {
-            get { return percentage; }
-            set { percentage = value; propertyChanged(); }
+            get { return percentage > 0 ? percentage.ToString() : ""; }
+            set
+            {
+                bool canParse = float.TryParse(value, out float result);
+                percentage = canParse ? result : 0;
+            }
         }
 
         private int days;
-        public int Days
+        public string Days
         {
-            get { return days; }
-            set { days = value; propertyChanged(); }
+            get { return days > 0 ? days.ToString() : ""; }
+            set
+            {
+                bool canParse = int.TryParse(value, out int result);
+                days = canParse ? result : 0;
+            }
         }
 
-        private const int DAY_DIGITS = 3;
-
-        private float result;
+        private const int DAY_DIGITS = 2;
         private const string FILENAME = "Result.txt";
 
+        private float result;
         private readonly StringBuilder output = new();
         private string fullName;
 
@@ -57,20 +70,26 @@ namespace PopulationPredictor
 
         public void Calc()
         {
+            if (startNumber <= 0 || percentage <= 0 || days <= 0)
+            {
+                MessageBox.Show(invalidErrorMessage);
+                return;
+            }
+
             output.Clear();
             Items.Clear();
 
             output.Append($"{Environment.NewLine}New predicting for {Environment.NewLine}" +
-                $"  starting number:{StartNumber}{Environment.NewLine}" +
-                $"  daily increase :{Percentage}%{Environment.NewLine}" +
-                $"  number of days :{Days}{Environment.NewLine}");
+                $"  starting number:{startNumber}{Environment.NewLine}" +
+                $"  daily increase :{percentage}%{Environment.NewLine}" +
+                $"  number of days :{days}{Environment.NewLine}");
 
-            result = StartNumber;
+            result = startNumber;
 
             for (int x = 0; x < days; x++)
             {
-                result += result * (Percentage / 100);
-                string resultString = $"Day {x + 1,DAY_DIGITS}: {result}";
+                result += result * (percentage / 100);
+                string resultString = $"Day{x + 1,DAY_DIGITS}: {Math.Round(result)}";
                 Items.Add(resultString);
                 output.Append($"{resultString}{Environment.NewLine}");
             }
@@ -83,13 +102,6 @@ namespace PopulationPredictor
             {
                 File.AppendAllText(fullName, output.ToString());
                 message = $"Results have been saved to file: ${fullName}";
-
-                output.Clear();
-                Items.Clear();
-
-                StartNumber = 0;
-                Percentage = 0;
-                Days = 0;
             }
             else
             {
